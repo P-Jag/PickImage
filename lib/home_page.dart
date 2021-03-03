@@ -19,8 +19,21 @@ class _HomePageState extends State<HomePage> {
     imagePicker = ImagePicker();
   }
 
-  Future<void> chooseImageFromGallery() async {}
-  Future<void> takePictureWithCamera() async {}
+  Future<void> chooseImageFromGallery() async {
+    PickedFile pickedFile =
+        await imagePicker.getImage(source: ImageSource.gallery);
+    setState(() {
+      _image = File(pickedFile.path);
+    });
+  }
+
+  Future<void> takePictureWithCamera() async {
+    PickedFile pickedFile =
+        await imagePicker.getImage(source: ImageSource.camera);
+    setState(() {
+      _image = File(pickedFile.path);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +45,9 @@ class _HomePageState extends State<HomePage> {
           _image != null ? Image.file(_image) : Icon(Icons.image, size: 100.0),
           Center(
             child: RaisedButton(
-              child: Text('Choose/Capture new'),
-              onPressed: () {},
-              onLongPress: () {},
-            ),
+                child: Text('Choose/Capture new'),
+                onPressed: chooseImageFromGallery,
+                onLongPress: takePictureWithCamera),
           ),
         ],
       ),
